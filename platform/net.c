@@ -1,4 +1,6 @@
+#include <string.h>
 #include "net.h"
+
 
 #if defined(WIN32)
 #define INIT_NETWORK                                    \
@@ -9,6 +11,8 @@
     if (0 != WSAStartup(version_requested, &wsadata))   \
         return INVALID_SOCKET;                                   
 #else
+#include <unistd.h>
+#include <netdb.h>
 #define INIT_NETWORK
 #endif
 

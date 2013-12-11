@@ -7,6 +7,7 @@
 *****************************************************************************************/
 
 #include <stdint.h>
+#include <stddef.h>
 
 #if defined(WIN32)
 
@@ -16,7 +17,7 @@
 typedef int socklen_t;
 #define socket_last_error()                                WSAGetLastError()
 
-#elif
+#else
 
 #include <sys/types.h>
 #include <sys/socket.h>
