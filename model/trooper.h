@@ -1,7 +1,7 @@
 #ifndef _TROOPER_H_
 #define _TROOPER_H_
 
-#include "unit.h"
+#include "common.h"
 
 enum ct_trooper_type {
     TROOPER_UNKNOWN         = -1,
@@ -44,6 +44,9 @@ struct ct_trooper {
     ct_bool is_holding_field_ration;
 };
 
+/*
+ * Returns shooting damage inflicted by the trooper in specified stance, as integer
+ */
 static int get_trooper_damage(const struct ct_trooper *trooper, enum ct_trooper_stance stance) {
     switch (stance) {
         case STANCE_PRONE:

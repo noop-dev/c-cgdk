@@ -1,7 +1,7 @@
 #ifndef _BONUS_H_
 #define _BONUS_H_
 
-#include "unit.h"
+#include "common.h"
 
 enum ct_bonus_type {
     BONUS_UNKNOWN       = -1,

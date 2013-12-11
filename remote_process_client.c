@@ -130,8 +130,7 @@ static void client_flush_buffer(remote_process_client *client)
 static void client_write_bytes(remote_process_client *client, const void *data, size_t size)
 {
     ptrdiff_t bytes_left;
-    while ((bytes_left = client->write_buffer + CLIENT_WRITE_BUFFER_SIZE - client->write_pointer) <= (ptrdiff_t)size)
-    {
+    while ((bytes_left = client->write_buffer + CLIENT_WRITE_BUFFER_SIZE - client->write_pointer) <= (ptrdiff_t)size) {
         memcpy(client->write_pointer, data, bytes_left);
         data = (const char*)data + bytes_left;
         size -= bytes_left;
@@ -159,9 +158,8 @@ static void client_write_double(remote_process_client *client, double data)
     client_write_bytes(client, &data, 8);
 }
 
-static void client_write_string( remote_process_client *client, const char *str)
+static void client_write_string(remote_process_client *client, const char *str)
 {
-
     int32_t length = (int32_t)strlen(str);
     WRITE_INT32(length);
     client_write_bytes(client, str, length);
@@ -173,25 +171,27 @@ void client_init(remote_process_client *client, const char* host, unsigned port,
     client->is_little_endian = is_little_endian();
     client->socket = socket_init_tcp();
     client->token = token;
-    client->cells_read = client->cell_visibilities_read = 0;
     client->write_pointer = client->write_buffer;
 
-    socket_enable_nagle_algorithm(client->socket, 0);
-    
+    client->cells_read = client->cell_visibilities_read = 0;
+    memset(client->cells, 0, sizeof(client->cells));
+    client->cell_visibilities = NULL;
+
     if (0 != socket_connect(client->socket, host, port)) {
         exit(10001);
     }
 
-    memset(client->cells, 0, sizeof(client->cells));
-    client->cell_visibilities = NULL;
+    socket_enable_nagle_algorithm(client->socket, 0);
 }
 
 void client_close(remote_process_client *client)
 {
-
     if (INVALID_SOCKET != client->socket) {
         socket_close(client->socket);
         client->socket = INVALID_SOCKET;
+    }
+    if (NULL != client->cell_visibilities) {
+        free(client->cell_visibilities);
     }
 }
 
@@ -278,17 +278,16 @@ static void client_read_players(const remote_process_client *client, struct ct_m
     memset(world->players, 0xCC, players_count * sizeof(struct ct_player));
 
     for (i = 0; i < players_count; ++i) {
-        if (READ_BOOL()) {
-            struct ct_player *player = &world->players[i];
-            player->id = READ_INT64();
-            player->name = READ_STRING();
-            player->score = READ_INT32();
-            player->strategy_crashed = READ_BOOL();
-            player->approximate_position.x = READ_INT32();
-            player->approximate_position.y = READ_INT32();
-        } else {
+        struct ct_player *player = &world->players[i];
+        if (!READ_BOOL()) {
             exit(10004);
         }
+        player->id = READ_INT64();
+        player->name = READ_STRING();
+        player->score = READ_INT32();
+        player->strategy_crashed = READ_BOOL();
+        player->approximate_position.x = READ_INT32();
+        player->approximate_position.y = READ_INT32();
     }
 }
 
@@ -353,15 +352,14 @@ static void client_read_bonuses(const remote_process_client *client, struct ct_m
     memset(world->bonuses, 0xCC, bonuses_count * sizeof(struct ct_bonus));
 
     for (i = 0; i < bonuses_count; ++i) {
-        if (READ_BOOL()) {
-            struct ct_bonus *bonus = &world->bonuses[i];
-            bonus->id = READ_INT64();
-            bonus->position.x = READ_INT32();
-            bonus->position.y = READ_INT32();
-            bonus->type = READ_ENUM(ct_bonus_type);
-        } else {
+        struct ct_bonus *bonus = &world->bonuses[i];
+        if (!READ_BOOL()) {
             exit(10010);
         }
+        bonus->id = READ_INT64();
+        bonus->position.x = READ_INT32();
+        bonus->position.y = READ_INT32();
+        bonus->type = READ_ENUM(ct_bonus_type);
     }
 }
 
@@ -438,9 +436,19 @@ static void client_read_world(remote_process_client *client, struct ct_mutable_w
         exit(10002);
     }
 
+    memset(world, 0xCC, sizeof(*world));
+
     world->move_index = READ_INT32();
     world->width = READ_INT32();
     world->height = READ_INT32();
+
+    /* Will return error if the map sizes are bigger than we expect */
+    if (world->width > MAP_WIDTH_ALIGNED) {
+        exit(10007);
+    }
+    if (world->height > MAP_HEIGHT) {
+        exit(10008);
+    }
 
     client_read_players(client, world);
     client_read_troopers(client, world);
@@ -452,13 +460,13 @@ static void client_read_world(remote_process_client *client, struct ct_mutable_w
 
 int client_read_player_context(remote_process_client *client, struct ct_player_context *context) {
     enum ct_message_type message_type = READ_ENUM(ct_message_type);
-    if (MSG_GAME_OVER == message_type)
+    if (MSG_GAME_OVER == message_type) {
         return -1;
-
+    }
     VERIFY(message_type, MSG_PLAYER_CONTEXT);
-    if (!READ_BOOL())
+    if (!READ_BOOL()) {
         return -1;
-
+    }
     client_read_trooper(client, &context->trooper);
     client_read_world(client, &context->world);
     return 0;

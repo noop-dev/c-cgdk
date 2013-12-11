@@ -34,20 +34,6 @@ struct ct_game {
     int medikit_heal_self_bonus_hitpoints;
     int field_ration_eat_cost;
     int field_ration_bonus_action_points;
-    /*    public:
-    Game(int moveCount,
-    int lastPlayerEliminationScore, int playerEliminationScore,
-    int trooperEliminationScore, double trooperDamageScoreFactor,
-    int stanceChangeCost, int standingMoveCost, int kneelingMoveCost, int proneMoveCost,
-    int commanderAuraBonusActionPoints, double commanderAuraRange,
-    int commanderRequestEnemyDispositionCost, int commanderRequestEnemyDispositionMaxOffset,
-    int fieldMedicHealCost, int fieldMedicHealBonusHitpoints, int fieldMedicHealSelfBonusHitpoints,
-    double sniperStandingStealthBonus, double sniperKneelingStealthBonus, double sniperProneStealthBonus,
-    double sniperStandingShootingRangeBonus, double sniperKneelingShootingRangeBonus,
-    double sniperProneShootingRangeBonus, double scoutStealthBonusNegation,
-    int grenadeThrowCost, double grenadeThrowRange, int grenadeDirectDamage, int grenadeCollateralDamage,
-    int medikitUseCost, int medikitBonusHitpoints, int medikitHealSelfBonusHitpoints,
-    int fieldRationEatCost, int fieldRationBonusActionPoints);*/
 };
 
 #endif

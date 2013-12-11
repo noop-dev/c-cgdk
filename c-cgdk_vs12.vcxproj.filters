@@ -47,9 +47,6 @@
     <ClInclude Include="model\world.h">
       <Filter>Header Files\model</Filter>
     </ClInclude>
-    <ClInclude Include="model\unit.h">
-      <Filter>Header Files\model</Filter>
-    </ClInclude>
     <ClInclude Include="model\bonus.h">
       <Filter>Header Files\model</Filter>
     </ClInclude>
@@ -82,6 +79,9 @@
     </ClInclude>
     <ClInclude Include="platform\net.h">
       <Filter>Header Files\platform</Filter>
+    </ClInclude>
+    <ClInclude Include="model\common.h">
+      <Filter>Header Files\model</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

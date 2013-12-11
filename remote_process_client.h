@@ -21,11 +21,10 @@ struct remote_process_client {
 
     char write_buffer[CLIENT_WRITE_BUFFER_SIZE];
     char *write_pointer;
-    
 
-
-    enum ct_cell_type cells[MAP_HEIGHT][MAP_WIDTH + 2];
-                /* [stance][a_y][a_x][b_y][b_x] */
+            /* Usage: cells[y][x] */
+    enum ct_cell_type cells[MAP_HEIGHT][MAP_WIDTH_ALIGNED];
+            /* Usage: cell_visibilities[stance][a_y][a_x][b_y][b_x] */
     ct_cell_visibilities_t *cell_visibilities;
 };
 

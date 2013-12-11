@@ -17,7 +17,7 @@ enum ct_cell_type {
     CELL_HIGH_COVER     = 3
 };
 
-typedef unsigned char ct_cell_visibilities_t[_STANCE_COUNT_][MAP_HEIGHT][MAP_WIDTH + 2][MAP_HEIGHT][MAP_WIDTH + 2];
+typedef unsigned char ct_cell_visibilities_t[_STANCE_COUNT_][MAP_HEIGHT][MAP_WIDTH_ALIGNED][MAP_HEIGHT][MAP_WIDTH_ALIGNED];
 
 struct ct_world {
     int move_index;
@@ -30,7 +30,9 @@ struct ct_world {
     const struct ct_bonus *bonuses;
     int bonuses_count;
 
+            /* Usage: cells[y][x] */
     enum ct_cell_type cells[MAP_HEIGHT][MAP_WIDTH_ALIGNED];
+            /* Usage: cell_visibilities[stance][a_y][a_x][b_y][b_x] */
     ct_cell_visibilities_t *cell_visibilities;
 };
 
@@ -49,6 +51,9 @@ struct ct_mutable_world {
     ct_cell_visibilities_t *cell_visibilities;
 };
 
+/*
+ * Returns nonzero value if the viewer in viewer_stance is able to see/damage the object in object_stance
+ */
 static ct_bool is_visible(const struct ct_world *world, double max_range,
                           struct ct_point viewer, enum ct_trooper_stance viewer_stance,
                           struct ct_point object, enum ct_trooper_stance object_stance) 
@@ -60,6 +65,7 @@ static ct_bool is_visible(const struct ct_world *world, double max_range,
     return dx * dx + dy *dy <= max_range * max_range
            && (*world->cell_visibilities)[min_stance][viewer.y][viewer.x][object.y][object.x];
 }
+
 /*
  * Free mutable copy of the world structure. User shouldn't call this function.
  */

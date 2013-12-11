@@ -12,16 +12,16 @@ void move(const struct ct_trooper *self, const struct ct_world *world,
         return;
     }
 
-    if (self->action_points >= self->shoot_cost)
-    for (i = 0; i < world->troopers_count; ++i) {
-        const struct ct_trooper *trooper = &world->troopers[i];
-        if (!trooper->is_teammate)
-            if (is_visible(world, self->shooting_range, self->position, self->stance, trooper->position, trooper->stance))
-            {
-                move->action = ACT_SHOOT;
-                move->position = trooper->position;
-                return;
-            }
+    if (self->action_points >= self->shoot_cost) {
+        for (i = 0; i < world->troopers_count; ++i) {
+            const struct ct_trooper *trooper = &world->troopers[i];
+            if (!trooper->is_teammate)
+                if (is_visible(world, self->shooting_range, self->position, self->stance, trooper->position, trooper->stance)) {
+                    move->action = ACT_SHOOT;
+                    move->position = trooper->position;
+                    return;
+                }
+        }
     }
     
     move->action = ACT_MOVE;

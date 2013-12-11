@@ -31,24 +31,39 @@ typedef int SOCKET;
 #define socket_last_error()                              errno
 #endif
 
-/* Returns INVALID_SOCKET on failure */
+/*
+ * Create new network socket. Returns INVALID_SOCKET on failure
+ */
 SOCKET socket_init_tcp();
 
-/* Returns INVALID_SOCKET on failure */
+/*
+ * Create new network socket. Returns INVALID_SOCKET on failure
+ */
 SOCKET socket_init_udp();
 
-/* Returns 0 on success, platform-dependent error code otherwise */
+/*
+ * Close the socket. Returns 0 on success, platform-dependent error code otherwise
+ */
 int socket_close(SOCKET socket);
 
-/* Use non-zero parameter to enable, 0 to disable nagle algorithm for a socket. returns 0 on success. */
+/*
+ * Use non-zero parameter to enable, 0 to disable nagle algorithm for a socket. Returns 0 on success.
+ */
 int socket_enable_nagle_algorithm(SOCKET socket, int enable);
 
+/*
+ * Conect socket to the specified address. Returns 0 on success.
+ */
 int socket_connect(SOCKET socket, const char *host_name, unsigned port);
 
-/* Receive specified number of bytes. Blocking call. Returns 0 on success, non-zero on error or disconnect */
+/*
+ * Receive specified number of bytes. Blocking call. Returns 0 on success, non-zero on error or disconnect
+ */
 int socket_recv(SOCKET socket, char *data, unsigned long size);
 
-/* Send specified number of bytes. Blocking call. Returns 0 on success, non-zero on error or disconnect */
+/*
+ * Send specified number of bytes. Blocking call. Returns 0 on success, non-zero on error or disconnect
+ */
 int socket_send(SOCKET socket, const char *data, unsigned long size);
 
-#endif /* __NOOP_NETWORK__ */
+#endif /* _NOOP_NET_H_ */

@@ -18,13 +18,6 @@ void runner_init(struct runner * const runner, const char* host, const char* por
     client_init(&runner->client, host, atoi(port), token);
 }
 
-static void move_init(struct ct_move *move)
-{
-    move->action = ACT_END_TURN;
-    move->direction = DIR_UNKNOWN;
-    move->position = point(-1, -1);
-}
-
 void runner_run(struct runner * const runner)
 {
     int team_size;

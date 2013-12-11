@@ -1,7 +1,7 @@
 #ifndef _MOVE_H_
 #define _MOVE_H_
 
-#include "unit.h"
+#include "common.h"
 
 enum ct_action_type {
     ACT_UNKNOWN = -1,
@@ -31,5 +31,15 @@ struct ct_move {
     enum ct_direction direction;
     struct ct_point position;
 };
+
+/*
+ * Initialize move structure with default values.
+ */
+static void move_init(struct ct_move *move)
+{
+    move->action = ACT_END_TURN;
+    move->direction = DIR_UNKNOWN;
+    move->position = point(-1, -1);
+}
 
 #endif
