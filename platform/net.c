@@ -16,12 +16,14 @@
 #define INIT_NETWORK
 #endif
 
-SOCKET socket_init_tcp() {
+SOCKET socket_init_tcp()
+{
     INIT_NETWORK
     return socket(AF_INET, SOCK_STREAM,  IPPROTO_TCP);
 }
 
-SOCKET socket_init_udp() {
+SOCKET socket_init_udp()
+{
     INIT_NETWORK
     return socket(AF_INET, SOCK_STREAM,  IPPROTO_UDP);
 }
@@ -35,11 +37,13 @@ int socket_close(SOCKET socket)
 #endif
 }
 
-int socket_enable_nagle_algorithm(SOCKET socket, int enable) {
+int socket_enable_nagle_algorithm(SOCKET socket, int enable)
+{
     return setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, (char *) &enable, sizeof(enable));
 }
 
-int socket_connect(SOCKET socket, const char *host_name, unsigned port) {
+int socket_connect(SOCKET socket, const char *host_name, unsigned port)
+{
     struct sockaddr_in addr;
     struct in_addr host_address;
     struct hostent* host;
@@ -68,7 +72,8 @@ int socket_connect(SOCKET socket, const char *host_name, unsigned port) {
     return connect(socket, (struct sockaddr*)&addr, sizeof(addr));
 }
 
-int socket_recv(SOCKET socket, char *data, size_t size_left) {
+int socket_recv(SOCKET socket, char *data, size_t size_left)
+{
     int size_received;
 
     while (0 != size_left) {
@@ -82,7 +87,8 @@ int socket_recv(SOCKET socket, char *data, size_t size_left) {
 }
 
 /* Send specified amount of bytes. Blocking call. Returns 0 on success, non-zero on error or disconnect */
-int socket_send(SOCKET socket, const char *data, size_t size_left) {
+int socket_send(SOCKET socket, const char *data, size_t size_left)
+{
     int size_sent;
 
     while (0 != size_left) {
