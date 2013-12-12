@@ -17,6 +17,13 @@
 *.exe
 *.out
 *.app
+my_strategy
 
 Debug*/
 Release*/
+
+#etc
+compilation.log
+*.sdf
+*.opensdf
+*.suo

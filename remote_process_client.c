@@ -27,7 +27,7 @@ typedef struct remote_process_client remote_process_client;
 static int is_little_endian()
 {
     union {
-        uint16_t value;
+        uint16 value;
         unsigned char bytes[2];
     } test = {0x0201};
     
@@ -68,17 +68,17 @@ static void client_read_bytes(const remote_process_client *client, void *data, s
     }
 }
 
-static int32_t client_read_int32(const remote_process_client *client)
+static int32 client_read_int32(const remote_process_client *client)
 {
-    int32_t data;
+    int32 data;
     client_read_bytes(client, &data, 4);
     FIX_BYTE_ORDER(4);
     return data;
 }
 
-static int64_t client_read_int64(const remote_process_client *client)
+static int64 client_read_int64(const remote_process_client *client)
 {
-    int64_t data;
+    int64 data;
     client_read_bytes(client, &data, 8);
     FIX_BYTE_ORDER(8);
     return data;
@@ -94,7 +94,7 @@ static double client_read_double(const remote_process_client *client)
 
 static char *client_read_string(const remote_process_client *client)
 {
-    int32_t length = READ_INT32();
+    int32 length = READ_INT32();
     char *str;
     if (length < 0) {
         exit(10014);
@@ -146,7 +146,7 @@ static void client_write_byte(remote_process_client *client, unsigned char x)
     client_write_bytes(client, &x, 1);
 }
 
-static void client_write_int32(remote_process_client *client, int32_t data)
+static void client_write_int32(remote_process_client *client, int32 data)
 {
     FIX_BYTE_ORDER(4);
     client_write_bytes(client, &data, 4);
@@ -160,7 +160,7 @@ static void client_write_double(remote_process_client *client, double data)
 
 static void client_write_string(remote_process_client *client, const char *str)
 {
-    int32_t length = (int32_t)strlen(str);
+    int32 length = (int32)strlen(str);
     WRITE_INT32(length);
     client_write_bytes(client, str, length);
 }

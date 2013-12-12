@@ -60,7 +60,7 @@ int socket_connect(SOCKET socket, const char *host_name, unsigned port) {
 
     addr.sin_family = AF_INET;
     addr.sin_addr = host_address;
-    addr.sin_port = htons((uint16_t)port);
+    addr.sin_port = htons((uint16)port);
 
     if (-1 == addr.sin_addr.s_addr)
         return -1;
@@ -68,7 +68,7 @@ int socket_connect(SOCKET socket, const char *host_name, unsigned port) {
     return connect(socket, (struct sockaddr*)&addr, sizeof(addr));
 }
 
-int socket_recv(SOCKET socket, char *data, unsigned long size_left) {
+int socket_recv(SOCKET socket, char *data, size_t size_left) {
     int size_received;
 
     while (0 != size_left) {
@@ -82,7 +82,7 @@ int socket_recv(SOCKET socket, char *data, unsigned long size_left) {
 }
 
 /* Send specified amount of bytes. Blocking call. Returns 0 on success, non-zero on error or disconnect */
-int socket_send(SOCKET socket, const char *data, unsigned long size_left) {
+int socket_send(SOCKET socket, const char *data, size_t size_left) {
     int size_sent;
 
     while (0 != size_left) {
