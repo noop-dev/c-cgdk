@@ -21,7 +21,7 @@ typedef signed __int64 int64;
 /*
  * All other modern C compilers.
  */
-
+#include <stddef.h>
 #include <stdint.h>
 
 typedef uint16_t uint16;
