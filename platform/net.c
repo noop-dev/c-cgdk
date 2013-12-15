@@ -39,6 +39,8 @@ int socket_close(SOCKET socket)
 
 int socket_enable_nagle_algorithm(SOCKET socket, int enable)
 {
+        /* enabled TCP_NODELAY flag _disables_ nagle algorithm */
+    enable = !enable;
     return setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, (char *) &enable, sizeof(enable));
 }
 
